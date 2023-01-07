@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/.idea/Classes para AFD.iml" filepath="$PROJECT_DIR$/.idea/Classes para AFD.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../Estudos/Dicionario/.idea/Dicionario.iml" filepath="$PROJECT_DIR$/../Estudos/Dicionario/.idea/Dicionario.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../Estudos/.idea/Estudos.iml" filepath="$PROJECT_DIR$/../Estudos/.idea/Estudos.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../Estudos/For/.idea/For.iml" filepath="$PROJECT_DIR$/../Estudos/For/.idea/For.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../Estudos/Listas/.idea/Listas.iml" filepath="$PROJECT_DIR$/../Estudos/Listas/.idea/Listas.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../../Segundo Trabalho/TesteCadeia/.idea/TesteCadeia.iml" filepath="$PROJECT_DIR$/../../Segundo Trabalho/TesteCadeia/.idea/TesteCadeia.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../../Segundo Trabalho/Trabalho2/.idea/Trabalho2.iml" filepath="$PROJECT_DIR$/../../Segundo Trabalho/Trabalho2/.idea/Trabalho2.iml" />
+    </modules>
+  </component>
+</project>
