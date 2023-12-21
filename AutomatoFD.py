@@ -33,15 +33,15 @@ class AutomatoFD:
     #Cria a transição "(origem,simbolo)->destino", se os parametros são validos e retorna True. Caso contrário, não faz nada e retorna False.
     def criaTransicao(self, origem, destino, simbolo):
 
-        origem=int(origem)
+        origem = int(origem)
         destino = int(destino)
         simbolo = str(simbolo)
 
-        if not origem in self.estados: #verifica se o estado está no conjunto de estados
+        if not origem in self.estados: #verifica se o estado está no conjunto de estados  # noqa: E713
             return False
-        if not destino in self.estados: #verifica se o estado está no conjunto de estados
+        if not destino in self.estados: #verifica se o estado está no conjunto de estados  # noqa: E713
             return False
-        if len(simbolo) != 1 or not simbolo in self.alfabeto: #verifica se o simbolo digitado possui apenas 1 caractere e se ele está no conjunto do alfabeto
+        if len(simbolo) != 1 or not simbolo in self.alfabeto: #verifica se o simbolo digitado possui apenas 1 caractere e se ele está no conjunto do alfabeto  # noqa: E713
             return False
 
         self.transicoes[(origem, simbolo)] = destino #se estiver tudo certo, a transição é criada
@@ -49,12 +49,12 @@ class AutomatoFD:
 
     #Define um estado já existente como inicial
     def mudaEstadoInicial(self, id):
-        if not id in self.estados: #verifica se o estado faz parte do conjunto de estados
+        if not id in self.estados: #verifica se o estado faz parte do conjunto de estados  # noqa: E713
             return
         self.inicial = id #coloca o estado passado no parâmetro como sendo o novo estado inicial
 
     def mudaEstadoFinal(self, id, final):
-        if not id in self.estados:
+        if not id in self.estados:  # noqa: E713
             return
         if final: #se o estado for final, ele será incluído no conjunto de estados finais
             self.finais = self.finais.union({id})
@@ -64,7 +64,7 @@ class AutomatoFD:
     #Partindo do estado atual, processa a cadeia e retorna o estado de parada. Se ocorrer erro, liga a variavel __deuErro.
     def move(self, cadeia):
         for simbolo in cadeia: #o for percorre cada símbolo da cadeia
-            if not simbolo in self.alfabeto: #verifica se o símbolo está presente no alfabeto.
+            if not simbolo in self.alfabeto: #verifica se o símbolo está presente no alfabeto.  # noqa: E713
                 self.__deuErro = True #da erro se o símbolo nao estiver no alfabeto
                 break
             if(self.__estadoAtual, simbolo) in self.transicoes.keys(): #verifica se a transição existe
@@ -138,7 +138,7 @@ class AutomatoFD:
                 meuXml = file.read()
                 # xmltodict.parse() analisa o conteúdo da variável e converte em um Dicionário
                 meuXml = xmltodict.parse(meuXml)
-        except:
+        except:  # noqa: E722
             return None
         return meuXml
 
@@ -183,7 +183,7 @@ class AutomatoFD:
                 afd = xmltodict.unparse(afd) #converte o dicionário em xml
                 arquivo.write(afd)
                 return 0
-        except:
+        except:  # noqa: E722
             return None
 
     #a função verifica se os dois autômatos possuem o mesmo alfabeto para a operação de multiplicação dos autômatos
@@ -332,7 +332,3 @@ class AutomatoFD:
 
         #definindo o estado inicial do autômato resultante
         self.inicial = inicial
-
-
-
-

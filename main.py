@@ -1,5 +1,8 @@
 import AutomatoFD as AF
 import time
+import Minimizacao 
+import AutomatosEquivalentes
+
 while True:
     print("\n\n----*-----*----- BEM VINDO! -----*-----*-----\n"
           "O que deseja fazer?\n"
@@ -22,12 +25,12 @@ while True:
             afd = AF.AutomatoFD(alfabeto) #instancia o objeto para o autômato
             diretorio = input("Informe o diretorio do automato: ")
             afdXml = afd.leXML(diretorio) #lê o arquivo xml
-            if afdXml == None:
+            if afdXml is None:
                 print("Não foi possível ler o arquivo.Tente novamente.")
                 break
             else:
                 print("\n*-*-*-*-* Autômato lido com sucesso! *-*-*-*-* \n")
-
+                afd.carregaAFD(afdXml)
             while True:
                 print("\n-----*----- MENU DE OPÇÕES -----*-----\n"
                       "Printar autômato ------------------- 1\n"
@@ -41,7 +44,7 @@ while True:
                     break
 
                 elif opcao == 1: #PRINTAR AUTÔMATO
-                    afd.carregaAFD(afdXml)
+                    
                     print("\n----*----*----*-----------------------------------------------------------------------------------------------------------------------------------*----*----*----\n")
                     print(afd)
                     print("\n----*----*----*-----------------------------------------------------------------------------------------------------------------------------------*----*----*----\n")
@@ -68,6 +71,31 @@ while True:
                                 else:
                                     print('Rejeita cadeia "{}"'.format(cadeia))
 
+                elif opcao == 3: #MINIMIZAR AUTÔMATO 
+                    minimizarAFD = Minimizacao.Minimizacao() 
+
+                    minAFD = minimizarAFD.estadosEquivalentes(afd, alfabeto)
+
+                    if not minAFD:
+                        print("Esse AFD não tem como minimizar.")
+                    else:
+                        minafd = AF.AutomatoFD(alfabeto) #instancia o objeto para o autômato
+                        for estado in minAFD['Estados']:
+                            minafd.criaEstado(estado)
+                        for transicao in minAFD['Transições']:
+                            minafd.criaTransicao(transicao[0],minAFD['Transições'][transicao],transicao[1])
+                        minafd.mudaEstadoInicial(minAFD['Estado Inicial'])
+                        for final in minAFD['Estado final']:
+                            minafd.mudaEstadoFinal(final, True)
+                        
+                        print("O automato minimizado:")
+                        print(minafd)
+
+                        salvar = input("Deseja salvar o arquivo, digite S para sim e N para não: ").upper()
+                        if salvar == 'S':
+                            nomeArquivo = input("\nInforme o nome que deseja dar ao arquivo. Coloque a extensão (Ex: meuAfd.txt, meuAfd.xml): ")
+                            sucesso = minafd.gravaXml(nomeArquivo)
+                                                
                 elif opcao == 4: #SALVAR AUTÔMATO
                     nomeArquivo = input("\nInforme o nome que deseja dar ao arquivo. Coloque a extensão (Ex: meuAfd.txt, meuAfd.xml): ")
                     sucesso = afd.gravaXml(nomeArquivo)
@@ -83,7 +111,7 @@ while True:
             afd1 = AF.AutomatoFD(alfabeto)  # instancia o objeto para o 1º autômato
             diretorio = input("Informe o diretorio do 1º automato: ")
             afd1Xml = afd1.leXML(diretorio)  # lê o arquivo xml
-            if afd1Xml == None:
+            if afd1Xml is None:
                 print("Não foi possível ler o arquivo.Tente novamente.")
                 break
             else:
@@ -94,7 +122,7 @@ while True:
             afd2 = AF.AutomatoFD(alfabeto)  # instancia o objeto para o 2º autômato
             diretorio = input("Informe o diretorio do 2º automato: ")
             afd2Xml = afd2.leXML(diretorio)  # lê o arquivo xml
-            if afd2Xml == None:
+            if afd2Xml is None:
                 print("Não foi possível ler o arquivo.Tente novamente.")
                 break
             else:
@@ -141,7 +169,6 @@ while True:
                         print(afd2)
                         print("\n----*----*----*-----------------------------------------------------------------------------------------------------------------------------------*----*----*----\n")
 
-                #ALTERAÇÕES DESDE O ÚLTIMO CÓDIGO QUE MANDEI PRA TAYNA (Alterações.zip)
                 elif opcaoMult == 2:  #RODAR CADEIAS NOS AUTÔMATOS
                     while True:
                         print("\n-----*----- INSERINDO CADEIA -----*-----\n"
@@ -184,9 +211,9 @@ while True:
                         print("Multiplicando os autômatos. Aguarde um momento...\n")
                         time.sleep(3)
                         alfabeto = afd1.verificaAlfabeto(afd1.alfabeto, afd2.alfabeto) #verifica se os dois autômatos possuem o mesmo alfabeto
-                        if alfabeto == None:
+                        if alfabeto is None:
                             print("Os autômatos devem possuir o mesmo alfabeto. Tente novamente.")
-                        elif alfabeto != None:
+                        elif alfabeto is not None:
                             afdMulti = AF.AutomatoFD(alfabeto) #instanciando o objeto que guardará o autômato resultante da multiplicação
                             afdMulti.multiplicaAFD(afd1.estados, afd1.transicoes, afd2.estados, afd2.transicoes) #multiplicando e criando os estados e as transições do automato resultante
                             print("---*---*--- Automatos multiplicados com sucesso! ---*---*---\n\n"
@@ -218,8 +245,81 @@ while True:
                                     print("\n*-*-*-*-* Autômato salvo com sucesso! *-*-*-*-* \n")
                                 else:
                                     print("Não foi possível salvar o Autômato. Tente novamente.")
+                
+                elif opcaoMult == 4: #MINIMIZAR AUTÔMATOS 
+                    minimizarAFD1 = Minimizacao.Minimizacao() 
 
+                    minAFD1 = minimizarAFD1.estadosEquivalentes(afd1, alfabeto)
 
+                    if not minAFD1:
+                        print("Esse AFD não tem como minimizar.")
+                    else:
+                        minafd1 = AF.AutomatoFD(alfabeto) #instancia o objeto para o autômato
+                        for estado in minAFD1['Estados']:
+                            minafd1.criaEstado(estado)
+                        for transicao in minAFD1['Transições']:
+                            minafd1.criaTransicao(transicao[0],minAFD1['Transições'][transicao],transicao[1])
+                        minafd1.mudaEstadoInicial(minAFD1['Estado Inicial'])
+                        for final in minAFD1['Estado final']:
+                            minafd1.mudaEstadoFinal(final, True)
+                        
+                        print("\n----*----*----*---------------------------------------------------- 1º AUTÔMATO ------------------------------------------------------------------*----*----*----\n")
+                        print(minafd1)
+                        print("\n----*----*----*-----------------------------------------------------------------------------------------------------------------------------------*----*----*----\n")
+
+                    minimizarAFD2 = Minimizacao.Minimizacao() 
+
+                    minAFD2 = minimizarAFD2.estadosEquivalentes(afd2, alfabeto)
+
+                    if not minAFD2:
+                        print("Esse AFD não tem como minimizar.")
+                    else:
+                        minafd2 = AF.AutomatoFD(alfabeto) #instancia o objeto para o autômato
+                        for estado in minAFD2['Estados']:
+                            minafd2.criaEstado(estado)
+                        for transicao in minAFD2['Transições']:
+                            minafd2.criaTransicao(transicao[0],minAFD2['Transições'][transicao],transicao[1])
+                        minafd2.mudaEstadoInicial(minAFD2['Estado Inicial'])
+                        for final in minAFD2['Estado final']:
+                            minafd2.mudaEstadoFinal(final, True)
+                        
+                        print("\n----*----*----*---------------------------------------------------- 2º AUTÔMATO ------------------------------------------------------------------*----*----*----\n")
+                        print(minafd2)
+                        print("\n----*----*----*-----------------------------------------------------------------------------------------------------------------------------------*----*----*----\n")
+
+                        while True:
+                            print("---*--- SALVAR AUTÔMATOS ---*---\n"
+                                "Salvar 1º autômato ----------- 1\n"
+                                "Salvar 2º autômato ----------- 2\n"
+                                "Sair desse menu -------------- 0\n")
+                            opSalvar = int(input("Opção desejada: "))
+                            if opSalvar == 0:
+                                break
+
+                            elif opSalvar == 1:
+                                nomeArquivo = input("\nInforme o nome que deseja dar ao arquivo. Coloque a extensão (Ex: meuAfd.txt, meuAfd.xml): ")
+                                sucesso = minafd1.gravaXml(nomeArquivo)
+                                if sucesso == 0:
+                                    print("\n*-*-*-*-* Autômato salvo com sucesso! *-*-*-*-* \n")
+                                else:
+                                    print("Não foi possível salvar o Autômato. Tente novamente.")
+
+                            elif opSalvar == 2:
+                                nomeArquivo = input("\nInforme o nome que deseja dar ao arquivo. Coloque a extensão (Ex: meuAfd.txt, meuAfd.xml): ")
+                                sucesso = minafd2.gravaXml(nomeArquivo)
+                                if sucesso == 0:
+                                    print("\n*-*-*-*-* Autômato salvo com sucesso! *-*-*-*-* \n")
+                                else:
+                                    print("Não foi possível salvar o Autômato. Tente novamente.")  
+
+                    equivalentes = input("\nQuer saber se os dois autômatos são equivalnes, aperta S para sim e N para não: ").upper()
+                    if equivalentes == 'S':
+                        afdEqui = AutomatosEquivalentes.saoEquivalentes(minafd1, minafd2)
+                        if afdEqui:
+                            print("\nOs automatos são equivalentes.\n")
+                        else:
+                            print("\nOs automatos não são equivalentes.\n")
+                
                 elif opcaoMult == 5: #SALVAR AUTÔMATOS
                     while True:
                         print("---*--- SALVAR AUTÔMATOS ---*---\n"
@@ -246,6 +346,3 @@ while True:
                                 print("\n*-*-*-*-* Autômato salvo com sucesso! *-*-*-*-* \n")
                             else:
                                 print("Não foi possível salvar o Autômato. Tente novamente.")
-
-
-
